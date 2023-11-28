@@ -1,6 +1,6 @@
 # Devoluções AOF (Flutter App)
 
-O Devoluções AOF é um aplicativo mobile desenvolvido em Flutter para automatizar a redação de e-mails para AOFs devolvidos de forma imotivada pela rede DIOPE.
+O Devoluções AOF é um aplicativo web desenvolvido em Flutter para automatizar a redação de e-mails para AOFs devolvidos de forma imotivada pela rede DIOPE.
 
 ## Funcionalidades Principais
 
