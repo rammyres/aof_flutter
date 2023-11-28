@@ -14,7 +14,7 @@ O Devoluções AOF é um aplicativo web desenvolvido em Flutter para automatizar
 
 1. Escolha o tipo de devolução desejado: "Declaração de IR" ou "Formulário Antigo".
 2. Insira o número do AOF no formato correto (0000/000000000).
-3. Opcionalmente, adicione informações adicionais no campo de texto.
+3. Copie e cole a justificativa apresentada no Portal Jurídico
 4. Clique em "Enviar" para gerar automaticamente o texto correspondente à devolução.
 
 ## Tecnologias Utilizadas
