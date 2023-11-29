@@ -21,7 +21,7 @@ class TextoEmail extends StatelessWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
-            return MaterialPageRoute(builder: (context) => const Inicial());
+            return MaterialPageRoute(builder: (context) => Inicial());
           case '/telaVacilo':
             final Map<String, dynamic>? args =
                 settings.arguments as Map<String, dynamic>?;
@@ -37,7 +37,7 @@ class TextoEmail extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const Scaffold());
           default:
             // Caso a rota não seja encontrada, retorne a rota inicial
-            return MaterialPageRoute(builder: (context) => const Inicial());
+            return MaterialPageRoute(builder: (context) => Inicial());
         }
       },
     );

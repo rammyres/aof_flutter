@@ -1,9 +1,10 @@
 import 'package:aof_flutter/dados/vacilos.dart';
 import 'package:aof_flutter/telas/tela_vacilo.dart';
 import 'package:flutter/material.dart';
+import "package:aof_flutter/modelos/vacilo.dart";
 
 class Inicial extends StatefulWidget {
-  const Inicial({Key? key}) : super(key: key);
+  Inicial({Key? key}) : super(key: key);
 
   @override
   _InicialState createState() => _InicialState();
@@ -14,13 +15,53 @@ class _InicialState extends State<Inicial> {
   String _inputNumber = '';
   String _generatedText = '';
   String _largeText = '';
-  Vacilos _vacilos = Vacilos();
+  late Vacilos _vacilos;
+  List<DropdownMenuItem<String>> items = [];
+  String _alertText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _vacilos = Vacilos();
+    _carregarVacilos();
+  }
+
+  Future<void> _carregarVacilos() async {
+    await _vacilos.carregarVacilos();
+
+    Set<String> tiposUnicos =
+        _vacilos.vacilos.map((vacilo) => vacilo.tipo).toSet();
+
+    setState(() {
+      _selectedOption = tiposUnicos.isNotEmpty ? tiposUnicos.first : '';
+      items = tiposUnicos.map((tipo) {
+        Vacilo vacilo = _vacilos.vacilos.firstWhere((v) => v.tipo == tipo);
+        return DropdownMenuItem<String>(
+          value: vacilo.tipo,
+          child: Text(vacilo.descricao),
+        );
+      }).toList();
+    });
+  }
+
+  void _updateAlertText() {
+    Vacilo? vacilo = _vacilos.vacilosPorTipo(tipo: _selectedOption);
+    if (vacilo != null) {
+      setState(() {
+        _alertText = vacilo.alerta;
+      });
+    } else {
+      setState(() {
+        _alertText = '';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Formulário IR'),
+        title: const Text('Gerar resposta para devoluções'),
       ),
       body: Center(
         child: Padding(
@@ -33,26 +74,17 @@ class _InicialState extends State<Inicial> {
                 style: TextStyle(fontSize: 20.0),
               ),
               const SizedBox(height: 20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _selectedOption = 'formulario_ir';
-                      });
-                    },
-                    child: const Text('Declaração de IR'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _selectedOption = 'formulario_antigo';
-                      });
-                    },
-                    child: const Text('Formulário Antigo'),
-                  ),
-                ],
+              // DropdownButton preenchido com a lista de vacilos
+              DropdownButton<String>(
+                hint: const Text('Selecione o motivo da devolução'),
+                value: _selectedOption,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedOption = newValue!;
+                    _updateAlertText();
+                  });
+                },
+                items: items,
               ),
               const SizedBox(height: 20.0),
               _selectedOption.isNotEmpty
@@ -60,7 +92,7 @@ class _InicialState extends State<Inicial> {
                       children: [
                         TextFormField(
                           decoration: const InputDecoration(
-                            labelText: 'Número (no formato 0000/000000000)',
+                            labelText: 'AOF (no formato 0000/000000000)',
                           ),
                           onChanged: (value) {
                             setState(() {
@@ -68,6 +100,17 @@ class _InicialState extends State<Inicial> {
                             });
                           },
                         ),
+                        const SizedBox(height: 20.0),
+                        if (_alertText.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text(
+                              _alertText,
+                              style: const TextStyle(
+                                  fontSize: 16.0, color: Colors.red),
+                            ),
+                          ),
+                        const SizedBox(height: 20.0),
                         if (_inputNumber.isNotEmpty)
                           TextFormField(
                             maxLines: null,
