@@ -7,29 +7,14 @@ class TelaVacilo extends StatelessWidget {
   final String aof;
   final String justificativa;
   const TelaVacilo({
-    Key? key,
+    super.key,
     required this.vacilo,
     required this.justificativa,
     required this.aof,
-  }) : super(key: key);
-
-  void _copyToClipboard(String textToCopy, BuildContext context) {
-    Clipboard.setData(ClipboardData(text: textToCopy));
-    const snackBar =
-        SnackBar(content: Text('Texto copiado para a área de transferência'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
-    final content = '''
-O AOF $aof foi devolvido sob a seguinte justificativa.
-
-*$justificativa*
-
-${vacilo.texto}
-''';
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -43,22 +28,42 @@ ${vacilo.texto}
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SelectableText.rich(
-              TextSpan(
-                text: content,
-                style: const TextStyle(fontSize: 16.0),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                children: [
+                  TextSpan(
+                    text:
+                        'O AOF $aof foi devolvido sob a seguinte justificativa. \n\n',
+                  ),
+                  TextSpan(
+                    text: justificativa,
+                    style: const TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                  TextSpan(
+                    text: '\n\n${vacilo.texto}',
+                  ),
+                ],
               ),
-              style: const TextStyle(
-                  fontFamily: 'Roboto'), // Define a fonte desejada
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                _copyToClipboard(content, context);
+                String content =
+                    'O AOF $aof foi devolvido sob a seguinte justificativa. '
+                    '$justificativa\n${vacilo.texto}';
+                Clipboard.setData(ClipboardData(text: content)).then((value) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text('Conteúdo copiado para a área de transferência'),
+                    ),
+                  );
+                });
               },
-              child: const Text('Copiar para a Área de Transferência'),
+              child: const Text('Copiar para área de transferência'),
             ),
           ],
         ),
