@@ -1,5 +1,4 @@
 import 'package:aof_flutter/dados/vacilos.dart';
-import 'package:aof_flutter/telas/tela_vacilo.dart';
 import 'package:flutter/material.dart';
 import "package:aof_flutter/modelos/vacilo.dart";
 
@@ -24,6 +23,7 @@ class _InicialState extends State<Inicial> {
     super.initState();
     _vacilos = Vacilos();
     _carregarVacilos();
+    _updateAlertText(); // Chamar a função para exibir o alerta ao iniciar
   }
 
   Future<void> _carregarVacilos() async {
