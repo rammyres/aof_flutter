@@ -1,6 +1,8 @@
 import 'package:aof_flutter/dados/vacilos.dart';
 import 'package:flutter/material.dart';
-import "package:aof_flutter/modelos/vacilo.dart";
+import 'package:flutter/services.dart';
+import 'package:aof_flutter/modelos/vacilo.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class Inicial extends StatefulWidget {
   Inicial({Key? key}) : super(key: key);
@@ -17,13 +19,17 @@ class _InicialState extends State<Inicial> {
   late Vacilos _vacilos;
   List<DropdownMenuItem<String>> items = [];
   String _alertText = '';
+  final maskFormatter = MaskTextInputFormatter(
+    mask: '####/#########',
+    filter: {"#": RegExp(r'[0-9]')},
+  );
 
   @override
   void initState() {
     super.initState();
     _vacilos = Vacilos();
     _carregarVacilos();
-    _updateAlertText(); // Chamar a função para exibir o alerta ao iniciar
+    _updateAlertText();
   }
 
   Future<void> _carregarVacilos() async {
@@ -94,6 +100,7 @@ class _InicialState extends State<Inicial> {
                           decoration: const InputDecoration(
                             labelText: 'AOF (no formato 0000/000000000)',
                           ),
+                          inputFormatters: [maskFormatter],
                           onChanged: (value) {
                             setState(() {
                               _inputNumber = value;

@@ -6,6 +6,11 @@ class TelaVacilo extends StatelessWidget {
   final Vacilo vacilo;
   final String aof;
   final String justificativa;
+  final String alerta1 =
+      "\nReiretamos a necessidade de diligência e cautela nas devoluções, considerando as implicações.\n";
+  final String alerta2 =
+      "\nDIOPE GESTÃO PSO e DIOPE SERVIÇOS JUDICIAIS cientificados, conforme orientação.";
+
   const TelaVacilo({
     super.key,
     required this.vacilo,
@@ -43,8 +48,10 @@ class TelaVacilo extends StatelessWidget {
                     style: const TextStyle(fontStyle: FontStyle.italic),
                   ),
                   TextSpan(
-                    text: '\n\n${vacilo.texto}',
+                    text: '\n\n${vacilo.texto}\n',
                   ),
+                  TextSpan(text: alerta1),
+                  TextSpan(text: alerta2),
                 ],
               ),
             ),
@@ -53,7 +60,7 @@ class TelaVacilo extends StatelessWidget {
               onPressed: () {
                 String content =
                     'O AOF $aof foi devolvido sob a seguinte justificativa. '
-                    '$justificativa\n${vacilo.texto}';
+                    '\n\n$justificativa\n\n${vacilo.texto}\n$alerta1 $alerta2';
                 Clipboard.setData(ClipboardData(text: content)).then((value) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
